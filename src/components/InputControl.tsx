@@ -1,8 +1,8 @@
 import { useId, useRef, useState } from 'react';
 import { ObjectKey } from '../types';
-import styles from './SimpleObjectEditor.module.css';
 import Input from './Input';
 import { convertToTypeLabel } from '../utillity';
+import useClassName from '../useClassName';
 
 type Props<T> = { name: ObjectKey, value: T; onChange: (key: ObjectKey, value: T) => void; }
 
@@ -18,6 +18,8 @@ const InputControl = <T,>({ name, value: defaultValue, onChange }: React.PropsWi
   const id = useId();
   /** 入力フォームの参照 */
   const inputRef = useRef<HTMLInputElement>(null);
+  /** クラス名の作成 */
+  const createClassName = useClassName();
 
   /** フォーム入力時の処理 */
   const handleChange = (newValue: T) => {
@@ -82,8 +84,8 @@ const InputControl = <T,>({ name, value: defaultValue, onChange }: React.PropsWi
   };
 
   return isFreeInputEnabled ? (
-    <div className={`simple-object-editor-control ${styles.control}`}>
-      <label className={`simple-object-editor-label ${styles.label}`} htmlFor={id}>
+    <div className={createClassName('control')}>
+      <label className={createClassName('label')} htmlFor={id}>
         {name instanceof Array ? name.at(-1) : name}
       </label>
       <input
@@ -92,30 +94,30 @@ const InputControl = <T,>({ name, value: defaultValue, onChange }: React.PropsWi
         type="text"
         value={editingJson}
         onChange={handleJsonChange}
-        className={`simple-object-editor-input ${styles.input} ${styles.freeInput}`}
+        className={createClassName('input', 'freeInput')}
         onBlur={endJsonMode}
         onKeyDown={preventEnterKey}
       />
       {message && (
-        <div className={`simple-object-editor-description ${styles.description}`}>{message}</div>
+        <div className={createClassName('description')}>{message}</div>
       )}
     </div>
   ) : (
-    <div className={`simple-object-editor-control ${styles.control}`}>
-      <label className={`simple-object-editor-label ${styles.label}`} htmlFor={id}>
+    <div className={createClassName('control')}>
+      <label className={createClassName('label')} htmlFor={id}>
         {name instanceof Array ? name.at(-1) : name}
       </label>
-      <div className={`simple-object-editor-input-container ${styles.inputContainer}`}>
+      <div className={createClassName('inputContainer')}>
         <Input id={id} value={defaultValue} onChange={handleChange} />
-          <button type="button" className={`simple-object-editor-button ${styles.button}`} title="自由入力" onClickCapture={startJsonMode}>
+          <button type="button" className={createClassName('button')} title="自由入力" onClickCapture={startJsonMode}>
             {defaultValue === null
-              ? <span className={`simple-object-editor-type-icon-null ${styles.typeIconNull}`} />
-              : <span className={`simple-object-editor-type-icon ${styles.typeIcon}`}>{convertToTypeLabel(defaultValue)}</span>
+              ? <span className={createClassName('typeIconNull')} />
+              : <span className={createClassName('typeIcon')}>{convertToTypeLabel(defaultValue)}</span>
             }
           </button>
       </div>
       {message && (
-        <div className={`simple-object-editor-description ${styles.description}`}>{message}</div>
+        <div className={createClassName('description')}>{message}</div>
       )}
     </div>
   );

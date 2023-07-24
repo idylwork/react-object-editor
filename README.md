@@ -65,7 +65,15 @@ const data = {
 データが編集されたときに実行されるコールバックです。  
 引数に更新後のデータが渡されます。
 
-## Styling
+#### className
+
+コンポーネント最上位にクラス名を追加します。
+
+#### classNamePrefix
+
+指定した接頭辞を持つ CSS クラスをコンポーネント内の各要素に付加します。
+
+## Styles
 
 CSS 変数を上書きするとカラースキームを変更できます。
 
@@ -76,3 +84,5 @@ CSS 変数を上書きするとカラースキームを変更できます。
   --simple-object-editor-free-input-color: 178, 27, 27;
 }
 ```
+
+また、`className`・`classNamePrefix`属性によるスタイルの上書きが可能です。

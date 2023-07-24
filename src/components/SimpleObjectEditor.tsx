@@ -1,11 +1,18 @@
 import { useState } from 'react';
 import { ObjectEditType, ObjectKey, ObjectData } from '../types';
-import { getDataItem, removedData, updatedData } from '../utillity';
+import { getDataItem, removedData, stringToKebabCase, updatedData } from '../utillity';
 import InputGroup from './InputGroup';
 import JsonInput from './JsonInput';
 import styles from './SimpleObjectEditor.module.css';
+import { ClassNamePrefixContext as ClassNameContext } from '../useClassName';
 
-type Props<Data extends ObjectData> = { data: Data, excludes?: (keyof Data)[]; samples?: Data[]; onChange: (newData: Data) => void; className?: string }
+type Props<Data extends ObjectData> = {
+  data: Data, excludes?: (keyof Data)[];
+  samples?: Data[];
+  onChange: (newData: Data) => void;
+  className?: string;
+  classNamePrefix?: string;
+}
 
 /**
  * オブジェクトを編集するフォーム
@@ -15,7 +22,7 @@ type Props<Data extends ObjectData> = { data: Data, excludes?: (keyof Data)[]; s
  * @param props.onChange データの更新があったときの処理
  * @returns
  */
-const SimpleObjectEditor = <Data extends ObjectData,>({ data, excludes = [], samples = [], onChange, className = '' }: React.PropsWithChildren<Props<Data>>): React.ReactElement<any, any> => {
+const SimpleObjectEditor = <Data extends ObjectData,>({ data, excludes = [], samples = [], onChange, className = '', classNamePrefix = '' }: React.PropsWithChildren<Props<Data>>): React.ReactElement<any, any> => {
   const [jsonMode, setJsonMode] = useState(false);
 
   const handleChange = (actionType: ObjectEditType, key: ObjectKey, value: any) => {
@@ -54,21 +61,43 @@ const SimpleObjectEditor = <Data extends ObjectData,>({ data, excludes = [], sam
     onChange(newData!);
   };
 
+  /**
+   * JSON編集が確定されたときの処理
+   * @param newData
+   */
   const handleJsonChange = (newData: Data) => {
     setJsonMode(false);
     onChange(newData);
   };
 
-  return (
-    <div className={`${className} ${styles.root}`}>
-      {jsonMode
-        ? <JsonInput data={data} onChange={handleJsonChange} />
-        : Object.entries(data).map(([key, value]) => !excludes.includes(key as keyof Data) && (
-          <InputGroup key={key} name={key} value={value} onChange={handleChange} />
-        ))
+  /**
+   * CSSクラス名を作成
+   * @param names
+   * @returns クラス名
+   */
+  const createClassName = (...names: string[]): string => {
+    const classNames: string[] = [];
+    names.forEach(name => {
+      classNames.push(styles[name])
+      if (classNamePrefix) {
+        classNames.push(`${classNamePrefix}-${stringToKebabCase(name)}`)
       }
-      {!jsonMode && <button type="button" className={`simple-object-editor-button ${styles.button} ${styles.jsonButton}`} onClick={() => setJsonMode(true)}>{'{ }'}</button>}
-    </div>
+    });
+    return classNames.join(' ');
+  }
+
+  return (
+    <ClassNameContext.Provider value={createClassName}>
+      <div className={`${className} ${styles.root}`}>
+        {jsonMode
+          ? <JsonInput data={data} onChange={handleJsonChange} />
+          : Object.entries(data).map(([key, value]) => !excludes.includes(key as keyof Data) && (
+            <InputGroup key={key} name={key} value={value} onChange={handleChange} />
+          ))
+        }
+        {!jsonMode && <button type="button" className={`simple-object-editor-button ${styles.button} ${styles.jsonButton}`} onClick={() => setJsonMode(true)}>{'{ }'}</button>}
+      </div>
+    </ClassNameContext.Provider>
   );
 };
 

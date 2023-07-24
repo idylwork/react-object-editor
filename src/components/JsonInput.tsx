@@ -1,5 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react';
-import styles from './SimpleObjectEditor.module.css';
+import useClassName from '../useClassName';
 
 type Props<Data> = { data: Data; onChange: (newData: Data) => void; }
 
@@ -15,6 +15,8 @@ const JsonInput = <Data,>({ data, onChange }: React.PropsWithChildren<Props<Data
   const [message, setMessage] = useState('');
   /** 入力フォームのID */
   const id = useId();
+  /** クラス名の作成 */
+  const createClassName = useClassName();
 
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -44,8 +46,8 @@ const JsonInput = <Data,>({ data, onChange }: React.PropsWithChildren<Props<Data
   };
 
   return (
-    <div className={`simple-object-editor-control ${styles.control} ${styles.jsonControl}`}>
-      <label className={`simple-object-editor-label ${styles.label}`} htmlFor={id}>
+    <div className={createClassName('control', 'jsonControl')}>
+      <label className={createClassName('label')} htmlFor={id}>
         JSON
       </label>
       <textarea
@@ -54,10 +56,10 @@ const JsonInput = <Data,>({ data, onChange }: React.PropsWithChildren<Props<Data
         value={json}
         onChange={handleChange}
         onBlur={parse}
-        className={`simple-object-editor-input ${styles.input} ${styles.freeInput} ${styles.jsonInput}`}
+        className={createClassName('input', 'freeInput', 'jsonInput')}
       />
       {message && (
-        <div className={`simple-object-editor-description ${styles.description}`}>{message}</div>
+        <div className={createClassName('description')}>{message}</div>
       )}
     </div>
   );

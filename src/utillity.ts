@@ -22,6 +22,15 @@ export const arrayReplace = <Data>(array: Data[], index: number, replacement: Da
 };
 
 /**
+ * 文字列をケバブケースに変換する
+ * @param text
+ * @returns
+ */
+export const stringToKebabCase = (text: string) => {
+  return text.replace(/[A-Z\u00C0-\u00D6\u00D8-\u00DE]/g, (match) => `-${match.toLowerCase()}`);
+};
+
+/**
  * データを検索する
  * @param data
  * @param key

@@ -43,7 +43,7 @@ export default function App() {
       <section className="editor">
         {dataList.map((data) => (
           <div key={data.id}>
-            <SimpleObjectEditor data={data} excludes={['id']} onChange={handleChange} className="simple-object-editor-override" />
+            <SimpleObjectEditor data={data} excludes={['id']} onChange={handleChange} className="simple-object-editor-override" classNamePrefix="simple-object-editor" />
           </div>
         ))}
       </section>

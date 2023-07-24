@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import styles from './SimpleObjectEditor.module.css';
+import useClassName from '../useClassName';
 
 type Props<T> = { id: string, value: T, onChange: (newValue: any) => void }
 
@@ -13,6 +13,8 @@ type Props<T> = { id: string, value: T, onChange: (newValue: any) => void }
 const Input = <T,>({ id, value, onChange }: React.PropsWithChildren<Props<T>>): React.ReactElement<any, any> => {
   /** 表示用の値 */
   const [editingValue, setEditingValue] = useState('');
+  /** クラス名の作成 */
+  const createClassName = useClassName();
 
   // 値が更新されたときにフォームに反映
   useEffect(() => {
@@ -45,9 +47,9 @@ const Input = <T,>({ id, value, onChange }: React.PropsWithChildren<Props<T>>): 
         type="checkbox"
         checked={editingValue !== 'false'}
         onChange={handleToggle}
-        className={`simple-object-editor-toggle-input ${styles.dummyInput}`}
+        className={createClassName('dummyInput')}
       />
-      <label htmlFor={id} className={`simple-object-editor-input ${styles.input} ${styles.toggleInput}`}>
+      <label htmlFor={id} className={createClassName('input', 'toggleInput')}>
         {editingValue}
       </label>
     </>
@@ -57,15 +59,15 @@ const Input = <T,>({ id, value, onChange }: React.PropsWithChildren<Props<T>>): 
       value={editingValue}
       onChange={handleChange}
       step={step}
-      className={`simple-object-editor-input ${styles.input}`}
+      className={createClassName('input')}
     />
-    case 'object': return <div className={`simple-object-editor-null ${styles.input} ${styles.null}`}>null</div>
+    case 'object': return <div className={createClassName('input', 'null')}>null</div>
     default: return <input
       id={id}
       type="text"
       value={editingValue}
       onChange={handleChange}
-      className={`simple-object-editor-input ${styles.input}`}
+      className={createClassName('input')}
     />
   }
 }
