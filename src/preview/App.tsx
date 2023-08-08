@@ -11,13 +11,14 @@ type Article = {
   title: string;
   description: (string|null)[];
   detail: ArticleCategory;
+  categoryId: number;
 }
 
 export default function App() {
   const [dataList, setDataList] = useState<Article[]>([
-    { id: 1, title: 'One', description: [''], detail: { id: 1, isDisplay: true } },
-    { id: 2, title: 'Two', description: [''], detail: { id: 2, isDisplay: true } },
-    { id: 3, title: 'Three', description: [null], detail: { id: 3, isDisplay: false } },
+    { id: 1, title: 'One', categoryId: 1, description: [''], detail: { id: 1, isDisplay: true } },
+    { id: 2, title: 'Two', categoryId: 1, description: [''], detail: { id: 2, isDisplay: true } },
+    { id: 3, title: 'Three', categoryId: 2, description: [null], detail: { id: 3, isDisplay: false } },
   ]);
 
   const [json, setJson] = useState('');
@@ -43,7 +44,13 @@ export default function App() {
       <section className="editor">
         {dataList.map((data) => (
           <div key={data.id}>
-            <SimpleObjectEditor data={data} excludes={['id']} onChange={handleChange} className="simple-object-editor-override" classNamePrefix="simple-object-editor" />
+            <SimpleObjectEditor
+              data={data}
+              types={{ id: null, categoryId: new Map([[1, 'Category A'], [2, 'Category B'], [3, 'Category C']]) }}
+              onChange={handleChange}
+              className="simple-object-editor-override"
+              classNamePrefix="simple-object-editor"
+            />
           </div>
         ))}
       </section>

@@ -1,4 +1,6 @@
-import { useEffect, useId, useRef, useState } from 'react';
+import {
+  useEffect, useId, useRef, useState,
+} from 'react';
 import useClassName from '../useClassName';
 
 type Props<Data> = { data: Data; onChange: (newData: Data) => void; }
@@ -8,7 +10,7 @@ type Props<Data> = { data: Data; onChange: (newData: Data) => void; }
  * @param data - 編集するデータ
  * @param onChange - JSON変更確定時の処理
  */
-const JsonInput = <Data,>({ data, onChange }: React.PropsWithChildren<Props<Data>>): React.ReactElement<any, any> => {
+const JsonInput = <Data, >({ data, onChange }: React.PropsWithChildren<Props<Data>>): React.ReactElement<any, any> => {
   /** 表示用の値 */
   const [json, setJson] = useState(() => JSON.stringify(data, null, 2));
   /** エラーメッセージ */
@@ -28,7 +30,7 @@ const JsonInput = <Data,>({ data, onChange }: React.PropsWithChildren<Props<Data
   // コンポーネント表示時、自動で入力フォームにフォーカスする
   useEffect(() => {
     inputRef.current?.focus();
-  }, [inputRef])
+  }, [inputRef]);
 
   /**
    * JSONをパースしてデータの変更を伝える

@@ -9,6 +9,7 @@ import { ObjectKey } from './types';
  */
 export const arrayReplace = <Data>(array: Data[], index: number, replacement: Data | null = null): Data[] => {
   if ('toSpliced' in Array.prototype) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     return replacement !== null ? array.toSpliced(index, 1, replacement) : array.toSpliced(index, 1);
   }
@@ -26,9 +27,7 @@ export const arrayReplace = <Data>(array: Data[], index: number, replacement: Da
  * @param text
  * @returns
  */
-export const stringToKebabCase = (text: string) => {
-  return text.replace(/[A-Z\u00C0-\u00D6\u00D8-\u00DE]/g, (match) => `-${match.toLowerCase()}`);
-};
+export const stringToKebabCase = (text: string) => text.replace(/[A-Z\u00C0-\u00D6\u00D8-\u00DE]/g, (match) => `-${match.toLowerCase()}`);
 
 /**
  * データを検索する

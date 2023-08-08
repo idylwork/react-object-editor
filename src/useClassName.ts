@@ -7,8 +7,6 @@ export const ClassNamePrefixContext = React.createContext<(...names: string[]) =
  * CSSクラス名作成コールバックを受け渡す
  * @returns
  */
-const useClassName = () => {
-  return useContext(ClassNamePrefixContext)
-}
+const useClassName = () => useContext(ClassNamePrefixContext);
 
 export default useClassName;
