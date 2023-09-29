@@ -13,12 +13,11 @@ type Props<T> = {
 }
 
 /**
- *  入力フォーム項目コンポーネント
+ * 入力フォーム項目コンポーネント
  * @param props.name キー名配列
  * @param props.value デフォルト値
  * @param props.typeRule タイプ設定 (NULLで指定なし)
  * @param props.onChange 値変更時の処理
- * @returns
  */
 const InputControl = <T, >({
   name, value, typeRule = null, onChange,
@@ -45,23 +44,11 @@ const InputControl = <T, >({
     }
 
     // typesが指定された場合は型を強制
-    switch (typeRule.inputType) {
-      case InputType.Number:
-        if (typeof defaultValue !== 'number') {
-          defaultValue = parseFloat(`${value}`) as T;
-        }
-        break;
-      case InputType.Text:
-        if (typeof defaultValue !== 'string') {
-          defaultValue = `${value}` as T;
-        }
-        break;
-      default:
-    }
+    defaultValue = typeRule.cast(defaultValue) as T;
   }
 
   /** フォーム入力時の処理 */
-  const handleChange = (newValue: T) => {
+  const handleChange = (newValue: T | null) => {
     if (!isFreeInputEnabled) {
       setMessage('');
       try {
@@ -166,15 +153,14 @@ const InputControl = <T, >({
         <Select id={id} value={defaultValue} typeRule={typeRule} onChange={handleChange} setMessage={setMessage} />
       ) : (
         <div className={createClassName('inputContainer')}>
-          <Input id={id} value={defaultValue} onChange={handleChange} />
-          {!typeRule
-            && (
+          <Input id={id} value={defaultValue} typeRule={typeRule} onChange={handleChange} />
+          {!typeRule && (
             <button type="button" className={createClassName('button')} title="自由入力" onClickCapture={startFreeInput}>
               {defaultValue === null
                 ? <span className={createClassName('typeIconNull')} />
                 : <span className={createClassName('typeIcon')}>{convertToTypeLabel(defaultValue)}</span>}
             </button>
-            )}
+          )}
         </div>
       )}
       {message && (

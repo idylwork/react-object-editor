@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { TypeRule } from '../types';
 import useClassName from '../useClassName';
 
@@ -22,11 +23,15 @@ const Select = <T, >({
 }: React.PropsWithChildren<Props<T>>): React.ReactElement<any, any> | null => {
   /** クラス名の作成 */
   const createClassName = useClassName();
+  /** 値がルール定義外か */
+  const otherValue = useMemo(() => (typeRule.includes(defaultValue) ? null : `${defaultValue}`), [defaultValue, typeRule]);
 
+  /**
+   * 選択変更時の処理
+   * @param event
+   */
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     try {
-      console.log(typeRule.values, typeRule.find(event.currentTarget.selectedIndex));
-
       onChange(typeRule.find(event.currentTarget.selectedIndex) as T);
     } catch (error) {
       if (error instanceof Error) {
@@ -37,7 +42,8 @@ const Select = <T, >({
 
   return (
     <select id={id} defaultValue={`${defaultValue}`} className={createClassName('input')} onChange={handleChange}>
-      {typeRule.values.map(([value, label]) => <option value={value} key={value}>{label}</option>)}
+      {otherValue && <option value={otherValue}>{otherValue}</option>}
+      {typeRule.values.map(([label, value]) => <option value={value} key={value}>{label}</option>)}
     </select>
   );
 };

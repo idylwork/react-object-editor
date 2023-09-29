@@ -11,6 +11,13 @@ type Props<T> = {
   onChange: (actionType: ObjectEditType, key: ObjectKey, value: T) => void;
 }
 
+/**
+ * 配列やオブジェクトなどの入力フォームグループ
+ * @param props.name - キー名
+ * @param props.value - 値
+ * @param props.typeRules - 入力ルール
+ * @param props.onChange - 入力時の処理
+ */
 const InputGroup = <T, >({
   name: nameRaw, value, typeRules, onChange,
 }: React.PropsWithChildren<Props<T>>): React.ReactElement<any, any> | null => {

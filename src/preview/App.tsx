@@ -14,11 +14,17 @@ type Article = {
   categoryId: number;
 }
 
+const typeRule = {
+  id: null,
+  title: 'string?',
+  categoryId: { 'Category A': 1, 'Category B': 2, 'Category C': 3 },
+};
+
 export default function App() {
   const [dataList, setDataList] = useState<Article[]>([
-    { id: 1, title: 'One', categoryId: 1, description: [''], detail: { id: 1, isDisplay: true } },
-    { id: 2, title: 'Two', categoryId: 1, description: [''], detail: { id: 2, isDisplay: true } },
-    { id: 3, title: 'Three', categoryId: 2, description: [null], detail: { id: 3, isDisplay: false } },
+    { id: 1, title: 'One', categoryId: 1, description: ['Example 1', 'Example 2'], detail: { id: 1, isDisplay: true } },
+    { id: 2, title: 'Two', categoryId: 2, description: [''], detail: { id: 2, isDisplay: true } },
+    { id: 3, title: 'Three', categoryId: 4, description: [null], detail: { id: 3, isDisplay: false } },
   ]);
 
   const [json, setJson] = useState('');
@@ -46,7 +52,7 @@ export default function App() {
           <div key={data.id}>
             <SimpleObjectEditor
               data={data}
-              types={{ id: null, categoryId: new Map([[1, 'Category A'], [2, 'Category B'], [3, 'Category C']]) }}
+              types={typeRule}
               onChange={handleChange}
               className="simple-object-editor-override"
               classNamePrefix="simple-object-editor"
